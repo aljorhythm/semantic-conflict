@@ -12,6 +12,7 @@ function two {
     echo Create branches
     (cd repo; git checkout main; git checkout -b feature-1)
     (cd repo; git checkout main; git checkout -b feature-2)
+    (cd repo; git log --all --decorate --oneline --graph)
 }
 
 function three {
@@ -21,6 +22,8 @@ function three {
     (cd repo; git checkout feature-1)
     cp data.feature-1.json repo/data.json
     (cd repo; git add .; git commit -m "edit data.json 1"; git diff main)
+    (cd repo; git log --all --decorate --oneline --graph)
+
     echo
     echo Merge feature-1 to main
     (cd repo; git checkout main; git merge --no-edit feature-1)
@@ -34,9 +37,26 @@ function four {
     (cd repo; git checkout feature-2)
     cp data.feature-2.json repo/data.json
     (cd repo; git add .; git commit -m "edit data.json 2"; git diff main)
+    (cd repo; git log --all --decorate --oneline --graph)
+
     echo
     echo Merge feature-2 to main
     (cd repo; git checkout main; git merge --no-edit feature-2)
+    (cd repo; git log --all --decorate --oneline --graph)
+}
+
+function four-ff {
+    echo -- ff-only: Make changes in feature-2
+    echo
+
+    (cd repo; git checkout feature-2)
+    cp data.feature-2.json repo/data.json
+    (cd repo; git add .; git commit -m "edit data.json 2"; git diff main)
+    (cd repo; git log --all --decorate --oneline --graph)
+
+    echo
+    echo ff-only: Merge feature-2 to main
+    (cd repo; git checkout main; git merge --ff-only --no-edit feature-2)
     (cd repo; git log --all --decorate --oneline --graph)
 }
 
@@ -46,3 +66,16 @@ function five {
 
     (cat repo/data.json)
 }
+
+return
+
+source steps.sh
+one
+echo
+two
+echo
+three
+echo
+four
+echo
+five
